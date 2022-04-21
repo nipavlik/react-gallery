@@ -14,8 +14,16 @@ export function* workerImages() {
     const response = yield call(fetchImages);
     const images = response.data;
 
+    // Добавляем категории
+    const imagesCategory = images.map((image, index) => {
+      return {
+        ...image,
+        categoryId: (index % 4) + 1,
+      }
+    })
+
     yield delay(500);
-    yield put(successImages(images));
+    yield put(successImages(imagesCategory));
   } catch (error) {
     yield put(failureImages());
   }
