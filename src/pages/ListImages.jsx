@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { Spin, Alert } from "antd";
-import { useNavigate } from 'react-router-dom'
+import { Alert } from "antd";
+import { useNavigate } from "react-router-dom";
 
 import { fetchImages } from "../store/actions/images.action";
 import Image from "../components/Image";
+import Spinner from "../components/Spinner";
 
 function ListImages() {
   const dispatch = useDispatch();
@@ -19,18 +20,27 @@ function ListImages() {
     dispatch(fetchImages());
   }, [dispatch]);
 
-  if (loading) return <Spinner size="large" />;
+  if (loading) 
+    return <Spinner />;
+    
   if (error)
     return <Alert message="Ошибка получения фото" type="error" showIcon />;
 
   const onClickImage = (id) => {
-    navigate(`/images/${id}`)
-  }
+    navigate(`/images/${id}`);
+  };
 
   return (
     <List>
       {images.map((image) => {
-        return <Image key={image.id} id={image.id} src={image.thumbnailUrl} onClick={onClickImage} />;
+        return (
+          <Image
+            key={image.id}
+            id={image.id}
+            src={image.thumbnailUrl}
+            onClick={onClickImage}
+          />
+        );
       })}
     </List>
   );
@@ -41,12 +51,7 @@ const List = styled.div`
   flex-flow: column wrap;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: flex-start
-`;
-
-const Spinner = styled(Spin)`
-  text-align: center;
-  width: 100%;
+  justify-content: flex-start;
 `;
 
 export default ListImages;
